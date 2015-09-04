@@ -22,6 +22,7 @@ This guide is referred in all public and private Pull Requests / code reviews.
   *  [Require Versioning in the Accepts Header](#require-api-versioning-in-path)
   *  [Deprecation policy](#deprecation-policy)
   *  [X-Request-Ids Header for Introspection](#x-request-ids-header-for-introspection)
+  *  [Pagination](#pagination)
 * [Requests](#requests)
   *  [Accept serialized JSON in request bodies](#accept-serialized-json-in-request-bodies)
   *  [Request Content Types](#request-content-types)
@@ -98,6 +99,23 @@ prevents us to give a more extended notice.
 The Gild API includes a `X-Request-Id` header in each API response, populated with a
 UUID value. By logging these values on the client, server and any backing
 services, we provides a mechanism to trace, diagnose and debug requests.
+
+### Pagination
+
+Resource collections returned by API are paginated by default. The **max page size** is **100**.
+Paginated collection can be navigated using the following params:
+
+* **page** - The page to be fetched (default: 1)
+* **per_page** - How many record in a page (default: 30)
+
+The response header includes the following keys:
+
+```
+X-Page: [current page]
+X-Per-Page: [resources returned per page]
+X-Next-Page: [next page number]
+X-Prev-Page: [prev page number]
+```
 
 ### Requests
 
