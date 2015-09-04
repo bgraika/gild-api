@@ -115,7 +115,6 @@ X-Page: [current page]
 X-Per-Page: [resources returned per page]
 X-Next-Page: [next page number]
 X-Prev-Page: [prev page number]
-X-Offset: [applied offset]
 ```
 
 ### Requests
