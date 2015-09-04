@@ -107,13 +107,10 @@ Paginated collection can be navigated using the following params:
 
 * **page** - The page to be fetched (default: 1)
 * **per_page** - How many record in a page (default: 30)
-* **offset** - The offset to start from (default: 0)
 
 The response header includes the following keys:
 
 ```
-X-Total: [total not paginated resources count]
-X-Total-Pages: [totale pages]
 X-Page: [current page]
 X-Per-Page: [resources returned per page]
 X-Next-Page: [next page number]
