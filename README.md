@@ -40,6 +40,7 @@ This guide is referred in all public and private Pull Requests / code reviews.
   *  [UTC times formatted in ISO8601](#utc-times-formatted-in-iso8601)
   *  [Nested foreign key relations](#nested-foreign-key-relations)
   *  [Include](#include)  
+  *  [Polymorphic entities](#polymorphic-entities)  
   *  [Show rate limit status](#show-rate-limit-status)
   *  [JSON minified in all responses](#json-minified-in-all-responses)
 
@@ -322,12 +323,15 @@ Content-Type: application/json;charset=utf-8
   "created_at": "2012-01-01T12:00:00Z",
   "id": "01234567-89ab-cdef-0123-456789abcdef",
   "links" : {
-  	"self" : "https://service.com/users/01234567-89ab-cdef-0123-456789abcdef"  }
+  	"self" : "https://service.com/users/01234567-89ab-cdef-0123-456789abcdef"
+  }
   "company" : {
   	 "id": "01234567-89ab-cdef-0123-764568abghtr",
   	 "links" : {
   	    "self" : "https://service.com/companie/01234567-89ab-cdef-0123-764568abghtr"
-      }  	  }	 ................ 
+      }  	
+  }	
+ ................ 
 }
 ```
 The **self** link is always exposed when a resource can be retrieved  by the API. The links section can be used to expose more API services related to the resource.
@@ -410,9 +414,10 @@ or introduce more top-level response fields, e.g.:
 ```
 #### Include
 
-When possible the Gild API expose an **include** parameter of type Array. This is intended to extend the response including the full representation of a related object or other information that are not directly part of the returned resource.
+When possible the Gild API exposes the **include** parameter of type Array. 
+This is intended to extend the response including the full representation of a related resource object or other information that are not directly part of the returned resource.
 
-``bash
+```bash
 $ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef
 
 {
@@ -423,10 +428,10 @@ $ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef
   },
   ...
 }
-``
+```
 Including the full company resource:
 
-``bash
+```bash
 $ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef?include[]=company
 
 {
@@ -440,8 +445,40 @@ $ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef?inc
   },
   ...
 }
+```
+For performance reason the Gild API is likely to accept less include request when returning a resource collection.
+
+#### Polymorphic entities
+
+Polymorphic entities will expose a **parent** section where they declare their own specific parent relation.
+
+``bash
+$ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef/attachments
+
+[{
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "filename": "test.pdf",
+  "parent": {
+     "type": "documents"
+    	 "id": "01234567-89ab-cdef-0123-456789abcdef"
+    	 "links" : {
+    	 	"self" : "https://service.com/documents/01234567-89ab-cdef-0123-456789abcdef/attachment/01234567-89ab-cdef-0123-456789abcdef"
+    	 }
+  },
+  {
+  	
+  "id": "01234567-89ab-cdef-0123-456789ghtyrt",
+  "filename": "test.pdf",
+  "parent": {
+     "type": "comments"
+    	 "id": "01234567-89ab-cdef-0123-987645vgtbshr"
+    	 "links" : {
+    	 	"self" : "https://service.com/comments/01234567-89ab-cdef-0123-987645vgtbsh/attachment/01234567-89ab-cdef-0123-456789ghtyrt"
+    	 }
+  },
+  ...
+}]
 ``
-For performance reason the Gild API is likely to accept less include request when returning a collection.
  
 #### Rate limit status
 
