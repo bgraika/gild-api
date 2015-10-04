@@ -38,6 +38,7 @@ This guide is referred in all public and private Pull Requests / code reviews.
   *  [Standard timestamps](#standard-timestamps)
   *  [UTC times formatted in ISO8601](#utc-times-formatted-in-iso8601)
   *  [Nested foreign key relations](#nested-foreign-key-relations)
+  *  [Include](#include)  
   *  [Show rate limit status](#show-rate-limit-status)
   *  [JSON minified in all responses](#json-minified-in-all-responses)
 
@@ -381,7 +382,41 @@ or introduce more top-level response fields, e.g.:
   // ...
 }
 ```
+#### Include
 
+When possible the Gild API expose an **include** parameter of type Array. This is intended to extend the response including the full representation of a related object or other information that are not directly part of the returned resource.
+
+``bash
+$ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef
+
+{
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "name",
+  "company": {
+    	"id": "01234567-89ab-cdef-0123-456789abcdef"
+  },
+  ...
+}
+``
+Including the full company resource:
+
+``bash
+$ curl -X GET https://service.com/users/01234567-89ab-cdef-0123-456789abcdef?include[]=company
+
+{
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "name",
+  "company": {
+    	"id": "01234567-89ab-cdef-0123-456789abcdef",
+    	"domain" : "example.com",
+    	"name" : "Example Ltd"
+    	........
+  },
+  ...
+}
+``
+For performance reason the Gild API is likely to accept less include request when returning a collection.
+ 
 #### Rate limit status
 
 The Gild API has a rate limit for requests from clients to protect the health of the service
