@@ -34,6 +34,7 @@ This guide is referred in all public and private Pull Requests / code reviews.
   *  [Status codes](#status-codes)
   *  [Response Content Types](#response-content-types)
   *  [Full resources where available](#full-resources-where-available)
+  *  [Links section](#links-section)
   *  [Resource (UU)IDs](#resource-uuids)
   *  [Standard timestamps](#standard-timestamps)
   *  [UTC times formatted in ISO8601](#utc-times-formatted-in-iso8601)
@@ -306,6 +307,31 @@ Content-Type: application/json;charset=utf-8
 ...
 {}
 ```
+
+#### Links section
+
+Every resource returned by the Gild API include a **links** section.
+
+```bash
+$ curl -X GET  https://service.com/users/ 01234567-89ab-cdef-0123-456789abcdef
+
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=utf-8
+...
+{
+  "created_at": "2012-01-01T12:00:00Z",
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "links" : {
+  	"self" : "https://service.com/users/01234567-89ab-cdef-0123-456789abcdef"  }
+  "company" : {
+  	 "id": "01234567-89ab-cdef-0123-764568abghtr",
+  	 "links" : {
+  	    "self" : "https://service.com/companie/01234567-89ab-cdef-0123-764568abghtr"
+      }  	  }	 ................ 
+}
+```
+The **self** link is always exposed when a resource can be retrieved  by the API. The links section can be used to expose more API services related to the resource.
+
 
 #### Resource (UU)IDs
 
